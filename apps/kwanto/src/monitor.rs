@@ -77,6 +77,27 @@ pub enum Resposta {
     DonoEstranho(u32),
 }
 
+/// Quanto esperar o servidor aceitar a conexão para o dono aparecer.
+const ESPERA_ACEITE: Duration = Duration::from_secs(1);
+
+/// Dono do socket do servidor. Em kernels mais antigos, um socket que o servidor ainda não aceitou
+/// aparece como do root (UID 0); espera o aceite por até `limite`. Se continuar 0 (servidor que não
+/// aceita) ou sem dono, devolve isso mesmo, e a resposta é recusada.
+fn aguardar_dono(
+    mut consultar: impl FnMut() -> Option<u32>,
+    espera: Duration,
+    limite: Duration,
+) -> Option<u32> {
+    let inicio = std::time::Instant::now();
+    loop {
+        let dono = consultar();
+        if matches!(dono, Some(uid) if uid != 0) || inicio.elapsed() >= limite {
+            return dono;
+        }
+        std::thread::sleep(espera);
+    }
+}
+
 /// GET mínimo em HTTP/1.1 sobre uma conexão cujo dono do outro lado foi conferido.
 fn get_verificado(s: &Servico, caminho: &str) -> Result<Vec<u8>, Resposta> {
     let mut conexao =
@@ -89,7 +110,12 @@ fn get_verificado(s: &Servico, caminho: &str) -> Result<Vec<u8>, Resposta> {
         .map_err(|_| Resposta::Fora)?;
     let local = conexao.local_addr().map_err(|_| Resposta::Fora)?;
     // O socket do servidor nesta conexão: endereço local = o do serviço, remoto = o nosso.
-    let dono = kwanto_core::soquetes::dono(s.endereco, local).ok_or(Resposta::Fora)?;
+    let dono = aguardar_dono(
+        || kwanto_core::soquetes::dono(s.endereco, local),
+        Duration::from_millis(10),
+        ESPERA_ACEITE,
+    )
+    .ok_or(Resposta::Fora)?;
     if !s.donos.contains(&dono) {
         return Err(Resposta::DonoEstranho(dono));
     }
@@ -216,6 +242,47 @@ pub async fn acompanhar(
 #[cfg(test)]
 mod testes {
     use super::corpo_200;
+
+    use super::aguardar_dono;
+    use std::time::{Duration, Instant};
+
+    fn sequencia(v: Vec<Option<u32>>) -> impl FnMut() -> Option<u32> {
+        let mut it = v.into_iter();
+        move || it.next().unwrap_or(Some(0))
+    }
+
+    /// Kernels mais antigos mostram o socket ainda não aceito pelo servidor como do root (UID 0):
+    /// espera o servidor aceitar e então vê o dono de verdade.
+    #[test]
+    fn espera_o_servidor_aceitar_para_ver_o_dono() {
+        let curto = Duration::from_millis(1);
+        assert_eq!(
+            aguardar_dono(
+                sequencia(vec![Some(0), Some(0), Some(998)]),
+                curto,
+                Duration::from_secs(1)
+            ),
+            Some(998)
+        );
+        assert_eq!(
+            aguardar_dono(sequencia(vec![Some(998)]), curto, Duration::from_secs(1)),
+            Some(998)
+        );
+        let inicio = Instant::now();
+        assert_eq!(
+            aguardar_dono(|| Some(0), curto, Duration::from_millis(50)),
+            Some(0),
+            "nunca aceitou: continua 0"
+        );
+        assert!(
+            inicio.elapsed() < Duration::from_millis(500),
+            "não espera além do limite"
+        );
+        assert_eq!(
+            aguardar_dono(|| None, curto, Duration::from_millis(20)),
+            None
+        );
+    }
 
     #[test]
     fn respostas_http() {

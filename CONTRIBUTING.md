@@ -38,7 +38,9 @@ Antes de enviar, rode a mesma validação num ambiente limpo, igual ao do CI (pr
     sh scripts/verificar-limpo.sh
 
 Ela usa só o que está no commit, num Ubuntu 24.04 sem nada da sua máquina, e pega o que só funciona
-"aqui": uma ferramenta que só você tem instalada, um arquivo esquecido fora do commit.
+"aqui": uma ferramenta que só você tem instalada, um arquivo esquecido fora do commit. Um container
+usa o kernel da sua máquina, então diferenças de kernel só aparecem no CI, que roda em Ubuntu 22.04
+e 24.04.
 
 ## Antes do primeiro push
 

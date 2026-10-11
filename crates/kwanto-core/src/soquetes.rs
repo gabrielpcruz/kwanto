@@ -153,12 +153,10 @@ mod testes {
         let servidor = ouvinte.local_addr().unwrap();
         let cliente = std::net::TcpStream::connect(servidor).unwrap();
         let local = cliente.local_addr().unwrap();
+        // Depois do accept: antes dele, kernels mais antigos mostram o lado do servidor como do root.
+        let (_aceita, _) = ouvinte.accept().unwrap();
         let meu = std::fs::metadata("/proc/self").unwrap().uid();
         assert_eq!(dono(local, servidor), Some(meu), "lado do cliente");
-        assert_eq!(
-            dono(servidor, local),
-            Some(meu),
-            "lado do servidor, antes mesmo do accept"
-        );
+        assert_eq!(dono(servidor, local), Some(meu), "lado do servidor");
     }
 }

@@ -6,7 +6,13 @@ permissions:
 jobs:
   linux:
     # Tudo num script só (scripts/verificar.sh): o mesmo que se roda localmente antes de publicar.
-    runs-on: ubuntu-24.04
+    # Em duas versões do Ubuntu: os kernels diferem (um container local usa o kernel da máquina e não
+    # pega essas diferenças).
+    strategy:
+      fail-fast: false
+      matrix:
+        sistema: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.sistema }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
