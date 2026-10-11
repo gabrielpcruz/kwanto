@@ -2,7 +2,7 @@
 # Compila do código-fonte da tag. No Arch o atualizador embutido só avisa que há versão nova;
 # a atualização vem pelo AUR, por isso o ajudante root e a política do polkit não são instalados.
 pkgname=kwanto
-pkgver=0.1.0
+pkgver=0.1.1
 pkgrel=1
 pkgdesc="Quanto o seu PC gasta de energia, por componente, e quanto isso pesa na conta de luz"
 arch=('x86_64')

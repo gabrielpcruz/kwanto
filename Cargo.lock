@@ -1864,7 +1864,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -1892,7 +1892,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-api"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "axum",
@@ -1912,7 +1912,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-app"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "insta",
  "jiff",
@@ -1926,7 +1926,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-atualizacao"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "hex",
  "minisign",
@@ -1941,7 +1941,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-atualizar"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "kwanto-atualizacao",
  "rustix",
@@ -1950,7 +1950,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "jiff",
  "serde",
@@ -1961,7 +1961,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-ext"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "async-trait",
  "kwanto-core",
@@ -1971,7 +1971,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-release"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "kwanto-atualizacao",
@@ -1982,7 +1982,7 @@ dependencies = [
 
 [[package]]
 name = "kwanto-sensors"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "kwanto-core",
  "libc",
@@ -1995,14 +1995,14 @@ dependencies = [
 
 [[package]]
 name = "kwanto-standby"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "kwanto-sensors",
 ]
 
 [[package]]
 name = "kwanto-store"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "jiff",
  "kwanto-app",
@@ -2017,7 +2017,7 @@ dependencies = [
 
 [[package]]
 name = "kwantod"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "async-trait",
