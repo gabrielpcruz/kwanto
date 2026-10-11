@@ -1,0 +1,55 @@
+[Unit]
+Description=Kwanto: consumo de energia do PC
+# Depois dos módulos do kernel: o driver NVIDIA precisa estar carregado para o NVML.
+After=local-fs.target systemd-modules-load.service
+
+[Service]
+Type=notify
+ExecStart=/usr/bin/kwantod
+# Usuário próprio, sem root e sem nenhum privilégio: a regra udev 60-kwanto.rules libera o contador
+# RAPL ao grupo kwanto; o standby dos HDDs vem do serviço kwanto-standby (este não acessa discos).
+User=kwanto
+Group=kwanto
+DevicePolicy=closed
+# NVML (placas NVIDIA). Os nomes variam com a versão do driver; os ausentes são ignorados.
+DeviceAllow=char-nvidia rw
+DeviceAllow=char-nvidiactl rw
+DeviceAllow=char-nvidia-frontend rw
+DeviceAllow=char-nvidia-uvm rw
+DeviceAllow=char-nvidia-caps r
+Environment=KWANTO_DB=/var/lib/kwanto/kwanto.db
+StateDirectory=kwanto
+Restart=on-failure
+# Folga contra muitas conexões locais abertas de uma vez (cada uma usa um descritor).
+LimitNOFILE=65536
+RestartSec=5
+TimeoutStopSec=15
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+MemoryDenyWriteExecute=yes
+SystemCallFilter=@system-service
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+IPAddressDeny=any
+IPAddressAllow=localhost
+CapabilityBoundingSet=
+ProtectKernelTunables=yes
+ProtectKernelLogs=yes
+ProtectClock=yes
+ProtectHostname=yes
+ProtectProc=invisible
+RestrictNamespaces=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+PrivateIPC=yes
+RemoveIPC=yes
+UMask=0077
+# Sem ProcSubset=pid: a estimativa de CPU sem RAPL lê /proc/stat.
+
+[Install]
+WantedBy=multi-user.target

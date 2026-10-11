@@ -1,0 +1,19 @@
+[package]
+name = "kwanto-release"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1.0.104"
+kwanto-atualizacao = { version = "0.1.0", path = "../../crates/kwanto-atualizacao" }
+minisign = "0.10.0"
+serde_json = "1.0.152"
+
+[dev-dependencies]
+tempfile = "3.27.0"

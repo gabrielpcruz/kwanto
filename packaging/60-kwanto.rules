@@ -1,0 +1,3 @@
+# O contador de energia da CPU (RAPL) só é legível pelo root; libera a leitura ao grupo kwanto
+# (o serviço). Só nas zonas que têm o contador.
+SUBSYSTEM=="powercap", ACTION=="add", TEST=="energy_uj", RUN+="/bin/chgrp kwanto /sys%p/energy_uj", RUN+="/bin/chmod 0440 /sys%p/energy_uj"

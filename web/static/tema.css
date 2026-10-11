@@ -1,0 +1,55 @@
+/* Unifilar Ao Vivo: prancha de CAD escura. Compartilhado pelo dashboard e pelo popup da bandeja.
+   Tema escuro fixo por escolha de projeto. */
+@font-face { font-family: "Archivo"; font-style: normal; font-display: swap; font-weight: 100 900; font-stretch: 62.5% 125%;
+  src: url("fonts/archivo.woff2") format("woff2"); }
+@font-face { font-family: "Geist Mono"; font-style: normal; font-display: swap; font-weight: 100 900;
+  src: url("fonts/geist-mono.woff2") format("woff2"); }
+
+:root {
+  --papel: #0d1821;     /* fundo da prancha */
+  --grade: #16242f;     /* quadriculado */
+  --grade-2: #1f3240;   /* linhas de divisão */
+  --sup: #101e28;       /* superfícies */
+  --tinta: #d6e2ea;
+  --apagado: #7f93a2;
+  --fio: #2fb3a6;       /* condutor: única cor de destaque */
+  --fio-txt: #04201d;
+  --corrente: #e9fffb;
+  --perda: #e2786f;
+  --aviso: #e8b44c;
+  --f-tit: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-num: "Geist Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; }
+
+/* linha de status */
+.status { display: flex; gap: 6px 18px; flex-wrap: wrap; font-family: var(--f-num); font-size: 12px; color: var(--apagado); }
+.status b { color: var(--tinta); font-weight: 500; }
+.status .on::before { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--fio); margin-right: 6px; vertical-align: 1px; }
+.status .on.off::before { background: var(--perda); }
+
+/* botões */
+.btn { font: 600 13.5px var(--f-tit); font-stretch: 108%; padding: 9px 14px; border: 1px solid var(--fio);
+  background: var(--fio); color: var(--fio-txt); cursor: pointer; display: inline-flex; gap: 8px; align-items: center; justify-content: center; }
+.btn.sec { background: transparent; color: var(--tinta); border-color: var(--grade-2); }
+.btn:hover { filter: brightness(1.1); }
+.btn:focus-visible, .aba:focus-visible, input:focus-visible { outline: 2px solid var(--fio); outline-offset: 2px; }
+
+/* legenda de símbolos */
+.legenda-simb { display: grid; gap: 6px; font-size: 13px; color: var(--apagado); }
+.legenda-simb span { display: flex; gap: 8px; align-items: center; }
+.legenda-simb svg, .simb { width: 18px; height: 18px; flex: none; }
+.legenda-simb b { color: var(--tinta); font-weight: 600; }
+
+/* corrente animada nos condutores */
+.corr { animation: corre linear infinite; }
+@keyframes corre { to { stroke-dashoffset: -22; } }
+@media (prefers-reduced-motion: reduce) { .corr { animation: none; } }
+[data-r] { transition: opacity .2s; }
+.esmaecido { opacity: .3; }
+[hidden] { display: none !important; }
+
+/* Marca: o "Kw" (de kW, quilowatt) na cor do condutor. */
+.marca .kw { color: var(--fio); }

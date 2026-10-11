@@ -1,0 +1,4 @@
+[toolchain]
+# Versão exata: pacotes reproduzíveis com o mesmo compilador. Atualize de propósito.
+channel = "1.99.0"
+components = ["clippy", "rustfmt"]

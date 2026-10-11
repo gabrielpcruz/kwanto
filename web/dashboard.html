@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kwanto</title>
+<link rel="icon" href="/static/icons/kwanto-app.svg">
+<link href="/static/tema.css" rel="stylesheet">
+<style>
+body { margin: 0; background: var(--papel); color: var(--tinta); font: 15px/1.5 var(--f-tit); padding: 24px 20px 48px;
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 24px 24px; }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 18px; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.marca { display: flex; align-items: center; gap: 10px; font-weight: 600; font-stretch: 118%; font-size: 22px; letter-spacing: -.01em; margin: 0; }
+.marca svg { width: 22px; height: 22px; color: var(--fio); }
+
+.prancha { background: var(--sup); border: 1px solid var(--grade-2); position: relative; padding: 34px 24px 24px 44px; display: grid; gap: 22px; min-width: 0; }
+.regua-x, .regua-y { position: absolute; pointer-events: none; }
+.regua-x { left: 26px; right: 0; top: 0; height: 18px; border-bottom: 1px solid var(--grade-2);
+  background: repeating-linear-gradient(90deg, var(--grade-2) 0 1px, transparent 1px 12px) bottom / 100% 5px no-repeat,
+              repeating-linear-gradient(90deg, var(--apagado) 0 1px, transparent 1px 60px) bottom / 100% 9px no-repeat; }
+.regua-y { top: 18px; bottom: 0; left: 0; width: 26px; border-right: 1px solid var(--grade-2);
+  background: repeating-linear-gradient(0deg, var(--grade-2) 0 1px, transparent 1px 12px) right / 5px 100% no-repeat,
+              repeating-linear-gradient(0deg, var(--apagado) 0 1px, transparent 1px 60px) right / 9px 100% no-repeat; }
+@media (max-width: 560px) { .prancha { padding: 30px 14px 18px 36px; } }
+
+.leitura { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+.rot { font-size: 13px; color: var(--apagado); }
+.total { font-weight: 600; font-stretch: 118%; font-size: clamp(64px, 9vw, 104px); line-height: .9; letter-spacing: -.03em; }
+.total small { font-size: .3em; font-weight: 500; color: var(--apagado); margin-left: 6px; letter-spacing: 0; }
+.lado { font-family: var(--f-num); font-size: 13px; color: var(--apagado); text-align: right; }
+.lado b { display: block; color: var(--tinta); font-size: 22px; font-weight: 500; }
+
+.fluxo { overflow-x: auto; }
+.fluxo svg { display: block; width: 100%; min-width: 720px; height: auto; }
+.legenda-simb { border-top: 1px solid var(--grade-2); padding-top: 14px; }
+
+.painel-ext { display: grid; gap: 10px; }
+.painel-ext iframe { width: 100%; height: 320px; border: 1px solid var(--grade-2); background: var(--papel); }
+.nota-aviso { display: flex; gap: 10px; border: 1px solid color-mix(in srgb, var(--aviso) 55%, transparent); padding: 10px 12px; font-size: 13.5px; }
+.nota-aviso + .nota-aviso { margin-top: 8px; }
+.nota-aviso svg { width: 18px; height: 18px; flex: none; color: var(--aviso); margin-top: 1px; }
+
+.inf { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, .62fr); gap: 24px; }
+@media (max-width: 880px) { .inf { grid-template-columns: minmax(0, 1fr); } }
+h2 { font-size: 14px; font-weight: 600; font-stretch: 112%; margin: 0; }
+.cab-sec { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.abas { display: flex; border: 1px solid var(--grade-2); }
+.aba { font: 500 12.5px var(--f-num); background: none; color: var(--apagado); border: 0; padding: 5px 11px; cursor: pointer; }
+.aba + .aba { border-left: 1px solid var(--grade-2); }
+.aba.on { background: var(--fio); color: var(--fio-txt); }
+
+.graf { position: relative; padding-top: 4px; }
+.graf svg { display: block; width: 100%; height: 190px; overflow: visible; }
+.graf .eixo { display: flex; justify-content: space-between; font-family: var(--f-num); font-size: 11px; color: var(--apagado); margin-top: 4px; }
+.graf .escala { position: absolute; left: 0; font-family: var(--f-num); font-size: 10.5px; color: var(--apagado); }
+.mira { position: absolute; top: -22px; pointer-events: none; font-family: var(--f-num); font-size: 11.5px; color: var(--tinta);
+  background: var(--papel); border: 1px solid var(--grade-2); padding: 2px 6px; white-space: nowrap; z-index: 1; }
+.graf-nota { font-size: 12.5px; color: var(--apagado); margin: 8px 0 0; }
+
+/* carimbo de desenho técnico com os totais */
+.carimbo { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--grade-2); align-self: start; }
+.carimbo > div { padding: 9px 11px; border-top: 1px solid var(--grade-2); min-width: 0; }
+.carimbo > div:nth-child(-n+2) { border-top: 0; }
+.carimbo > div:nth-child(even) { border-left: 1px solid var(--grade-2); }
+.carimbo small { display: block; font-size: 11.5px; color: var(--apagado); }
+.carimbo b { font-family: var(--f-num); font-weight: 500; font-size: 18px; }
+.carimbo i { display: block; font-style: normal; font-family: var(--f-num); font-size: 11.5px; color: var(--apagado); }
+.carimbo .destaque b { color: var(--fio); }
+.carimbo .largo { grid-column: 1 / -1; border-left: 0 !important; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.ciclo { height: 3px; background: var(--grade-2); margin-top: 6px; }
+.ciclo > div { height: 100%; background: var(--fio); }
+
+.tabela { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th { font: 500 11.5px var(--f-num); color: var(--apagado); text-align: right; padding: 6px 8px; border-bottom: 1px solid var(--grade-2); }
+td { padding: 7px 8px; border-bottom: 1px solid var(--grade); text-align: right; font-family: var(--f-num); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+td.nome { font-family: var(--f-tit); display: flex; align-items: center; gap: 8px; }
+td.origem { color: var(--apagado); font-size: 12px; text-align: left; }
+th.origem { text-align: left; }
+.parcela { display: inline-block; width: 56px; height: 3px; background: var(--grade-2); vertical-align: middle; margin-left: 8px; }
+.parcela b { display: block; height: 100%; background: var(--fio); }
+tr.calculado .parcela b { background: var(--perda); }
+footer { font-size: 12.5px; color: var(--apagado); }
+
+/* painel de ajustes */
+dialog { margin: 0 0 0 auto; height: 100%; max-height: none; width: min(420px, 100%); border: 0; border-left: 1px solid var(--grade-2);
+  background: var(--sup); color: var(--tinta); padding: 0; }
+dialog::backdrop { background: rgba(4, 10, 14, .6); }
+.dlg-cab { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--grade-2); }
+.dlg-corpo { padding: 4px 20px 24px; }
+dialog h3 { font: 500 12px var(--f-num); color: var(--apagado); margin: 20px 0 8px; }
+.campo { display: grid; gap: 4px; margin-bottom: 10px; }
+.campo label { font-size: 13px; color: var(--apagado); }
+.entrada { display: flex; border: 1px solid var(--grade-2); background: var(--papel); }
+.entrada input { flex: 1; min-width: 0; background: transparent; border: 0; color: var(--tinta); font: 14px var(--f-num); padding: 7px 9px; }
+.entrada span { font: 12px var(--f-num); color: var(--apagado); padding: 8px 9px; border-left: 1px solid var(--grade-2); }
+.toast { position: fixed; bottom: 20px; right: 20px; background: var(--sup); border: 1px solid var(--fio); padding: 10px 14px; font-size: 13.5px; z-index: 10; }
+.toast.erro { border-color: var(--perda); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1 class="marca"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M1 11h5l2.5-7 5 14L16 11h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg><span><span class="kw">Kw</span>anto</span></h1>
+    <button class="btn sec" type="button" id="abrir-ajustes"><svg class="simb" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 5h12M3 13h12" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="5" r="2" fill="var(--sup)" stroke="currentColor" stroke-width="1.4"/><circle cx="11" cy="13" r="2" fill="var(--sup)" stroke="currentColor" stroke-width="1.4"/></svg>Tarifa e ajustes</button>
+  </header>
+
+  <main class="prancha">
+    <div class="regua-x" aria-hidden="true"></div><div class="regua-y" aria-hidden="true"></div>
+    <div class="status" aria-live="polite">
+      <span class="on" id="st-vivo">conectando</span>
+      <span>amostra <b id="st-hora">--:--:--</b></span>
+      <span>intervalo <b>2 s</b></span>
+      <span>sensores <b id="st-sensores">–</b></span>
+    </div>
+
+    <div class="leitura">
+      <div><div class="rot">Potência na tomada, agora</div><div class="total num" id="w">–<small>W</small></div></div>
+      <div class="lado">custo por hora<b id="custo-h">–</b>ligado 24 h assim: <span id="mes">–</span>/mês</div>
+    </div>
+
+    <div class="fluxo"><svg id="fluxo" role="img" aria-label="Fluxo de energia da tomada até cada componente"></svg></div>
+    <div class="legenda-simb" id="legenda"></div>
+    <div id="avisos"></div>
+
+    <div class="inf">
+      <section>
+        <div class="cab-sec">
+          <h2>Histórico</h2>
+          <div class="abas" role="tablist" id="abas-hist">
+            <button class="aba on" role="tab" data-v="24h" type="button">24 h</button>
+            <button class="aba" role="tab" data-v="7d" type="button">7 dias</button>
+            <button class="aba" role="tab" data-v="30d" type="button">30 dias</button>
+          </div>
+        </div>
+        <div class="graf" id="graf-box">
+          <div class="mira" id="mira" hidden></div>
+          <svg id="graf" viewBox="0 0 600 190" preserveAspectRatio="none" role="img" aria-label="Histórico de consumo"></svg>
+          <div class="eixo" id="eixo"></div>
+        </div>
+        <p class="graf-nota" id="graf-nota"></p>
+      </section>
+      <section class="carimbo" aria-label="Totais">
+        <div><small>Hoje</small><b class="num" id="c-hoje">–</b></div>
+        <div><small>Energia hoje</small><b class="num" id="c-hoje-kwh">–</b></div>
+        <div><small id="c-ciclo-r">Conta atual</small><b class="num" id="c-ciclo">–</b><i id="c-ciclo-kwh"></i></div>
+        <div class="destaque"><small id="c-prev-r">Previsão</small><b class="num" id="c-prev">–</b><div class="ciclo" title="Quanto do ciclo da conta já passou"><div id="c-prog"></div></div></div>
+        <div><small>Média por dia</small><b class="num" id="c-media">–</b><i id="c-horas"></i></div>
+        <div><small>Média por dia em R$</small><b class="num" id="c-media-r">–</b><i>últimos 7 dias</i></div>
+        <div class="largo"><small id="c-tarifa-r">Tarifa efetiva</small><b class="num" id="c-tarifa">–</b></div>
+      </section>
+    </div>
+
+    <div id="extensoes"></div>
+
+    <section>
+      <div class="cab-sec">
+        <h2>Quanto cada componente custou</h2>
+        <div class="abas" role="tablist" id="abas-comp">
+          <button class="aba on" role="tab" data-v="hoje" type="button">Hoje</button>
+          <button class="aba" role="tab" data-v="ciclo" type="button">Conta atual</button>
+        </div>
+      </div>
+      <div class="tabela"><table>
+        <thead><tr><th>Componente</th><th class="origem">Origem do dado</th><th>kWh</th><th>R$</th><th>Parcela</th></tr></thead>
+        <tbody id="tabela"></tbody>
+      </table></div>
+    </section>
+  </main>
+  <footer>Os ramos tracejados são estimativas. Para acertá-las, compare o total com um medidor de tomada e ajuste os valores em Tarifa e ajustes.</footer>
+</div>
+
+<dialog id="ajustes" aria-labelledby="ajustes-tit">
+  <div class="dlg-cab"><h2 id="ajustes-tit">Tarifa e ajustes</h2><button class="btn sec" type="button" id="fechar-ajustes" aria-label="Fechar">✕</button></div>
+  <form class="dlg-corpo" id="form" method="dialog"></form>
+</dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="/static/unifilar.js"></script>
+<script src="/static/dashboard.js"></script>
+</body>
+</html>

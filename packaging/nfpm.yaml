@@ -1,0 +1,67 @@
+# Gera o .deb e o .rpm: KWANTO_VERSAO=0.1.0 nfpm pkg --config packaging/nfpm.yaml --packager deb
+name: kwanto
+arch: amd64
+platform: linux
+version: ${KWANTO_VERSAO}
+release: 1
+section: utils
+priority: optional
+maintainer: Gabriel Cruz <gabrielpcruz@users.noreply.github.com>
+description: |
+  Quanto o PC gasta de energia, por componente, e quanto isso pesa na conta de luz.
+homepage: https://github.com/gabrielpcruz/kwanto
+license: Apache-2.0
+overrides:
+  deb:
+    depends:
+      - libwebkit2gtk-4.1-0
+      - libgtk-3-0
+      # pkexec: no Debian 12+ e Ubuntu 23.04+ é pacote à parte do polkitd; antes vinha no policykit-1.
+      - pkexec | policykit-1
+    recommends:
+      - hdparm
+  rpm:
+    depends:
+      - webkit2gtk4.1
+      - gtk3
+      - polkit
+    recommends:
+      - hdparm
+contents:
+  - src: target/release/kwantod
+    dst: /usr/bin/kwantod
+    file_info: { mode: 0755 }
+  - src: target/release/kwanto
+    dst: /usr/bin/kwanto
+    file_info: { mode: 0755 }
+  - src: target/release/kwanto-atualizar
+    dst: /usr/libexec/kwanto/kwanto-atualizar
+    file_info: { mode: 0755 }
+  - src: target/release/kwanto-standby
+    dst: /usr/libexec/kwanto/kwanto-standby
+    file_info: { mode: 0755 }
+  - src: packaging/kwantod.service
+    dst: /usr/lib/systemd/system/kwantod.service
+  - src: packaging/kwanto-standby.service
+    dst: /usr/lib/systemd/system/kwanto-standby.service
+  - src: packaging/kwanto.sysusers
+    dst: /usr/lib/sysusers.d/kwanto.conf
+  - src: packaging/60-kwanto.rules
+    dst: /usr/lib/udev/rules.d/60-kwanto.rules
+  - src: packaging/io.github.gabrielpcruz.kwanto.policy
+    dst: /usr/share/polkit-1/actions/io.github.gabrielpcruz.kwanto.policy
+  - src: packaging/kwanto.desktop
+    dst: /usr/share/applications/kwanto.desktop
+  - src: packaging/kwanto.desktop
+    dst: /etc/xdg/autostart/kwanto.desktop
+    type: config
+  - src: packaging/kwanto.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/kwanto.svg
+  - src: README.md
+    dst: /usr/share/doc/kwanto/README.md
+  - src: LICENSE
+    dst: /usr/share/doc/kwanto/LICENSE
+scripts:
+  postinstall: packaging/scripts/pos-instalacao.sh
+  preremove: packaging/scripts/antes-remover.sh
+  postremove: packaging/scripts/pos-remover.sh

@@ -1,0 +1,12 @@
+[package]
+name = "kwanto-standby"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+kwanto-sensors = { version = "0.1.0", path = "../../crates/kwanto-sensors" }

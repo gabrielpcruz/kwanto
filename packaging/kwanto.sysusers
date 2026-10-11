@@ -1,0 +1,3 @@
+g kwanto -
+u kwanto -:kwanto "Kwanto (monitor de energia)" /var/lib/kwanto -
+u kwanto-standby -:kwanto "Kwanto (standby dos HDDs)" - -

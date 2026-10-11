@@ -1,0 +1,15 @@
+[package]
+name = "kwanto-ext"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = "0.1.92"
+kwanto-core = { version = "0.1.0", path = "../kwanto-core" }
+tokio = { version = "1.53.2", features = ["sync", "rt"] }
+tracing = "0.1.44"

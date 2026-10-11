@@ -1,0 +1,215 @@
+---
+source: crates/kwanto-app/tests/consultas.rs
+expression: s
+---
+{
+  "agora": {
+    "atualizado_ha_s": 1.0,
+    "componentes": [
+      {
+        "atividade": null,
+        "id": "gpu:GPU-1",
+        "origem": "NVML (driver NVIDIA)",
+        "pct": 80.7,
+        "rotulo": "NVIDIA GeForce RTX 4060",
+        "tipo": "medido",
+        "w": 88.0
+      },
+      {
+        "atividade": null,
+        "id": "fonte_perda",
+        "origem": "eficiência da fonte",
+        "pct": 12.0,
+        "rotulo": "Perda na fonte",
+        "tipo": "calculado",
+        "w": 13.1
+      },
+      {
+        "atividade": null,
+        "id": "ram",
+        "origem": "valor fixo",
+        "pct": 7.3,
+        "rotulo": "RAM",
+        "tipo": "estimado",
+        "w": 8.0
+      }
+    ],
+    "custo_hora": 0.093,
+    "parede_w": 109.1
+  },
+  "avisos": [
+    "A CPU está sendo estimada pelo uso, porque o sensor RAPL não está acessível (hardware sem RAPL, máquina virtual ou serviço sem root). Ajuste os watts dela em Tarifa e ajustes."
+  ],
+  "ciclo": {
+    "componentes": [
+      {
+        "custo": 0.15,
+        "id": "gpu:GPU-1",
+        "kwh": 0.176,
+        "origem": "NVML (driver NVIDIA)",
+        "pct": 80.7,
+        "rotulo": "NVIDIA GeForce RTX 4060",
+        "tipo": "medido"
+      },
+      {
+        "custo": 0.02,
+        "id": "fonte_perda",
+        "kwh": 0.026,
+        "origem": "eficiência da fonte",
+        "pct": 12.0,
+        "rotulo": "Perda na fonte",
+        "tipo": "calculado"
+      },
+      {
+        "custo": 0.01,
+        "id": "ram",
+        "kwh": 0.016,
+        "origem": "valor fixo",
+        "pct": 7.3,
+        "rotulo": "RAM",
+        "tipo": "estimado"
+      }
+    ],
+    "custo": 0.19,
+    "fim": "2026-11-01",
+    "inicio": "2026-10-01",
+    "kwh": 0.218,
+    "previsao_custo": 47.56,
+    "previsao_kwh": 55.949
+  },
+  "config": {
+    "bandeira_kwh": 0.0,
+    "cpu_max_w": 65.0,
+    "cpu_ocioso_w": 10.0,
+    "dia_leitura": 1,
+    "eficiencia_fonte": 0.88,
+    "fans_usb_w": 8.0,
+    "hdd_ativo_w": 6.0,
+    "hdd_ocioso_w": 4.0,
+    "hdd_standby_w": 0.8,
+    "placa_mae_w": 15.0,
+    "preco_kwh": 0.85,
+    "ram_w": 8.0,
+    "ssd_ativo_w": 5.5,
+    "ssd_ocioso_w": 1.5
+  },
+  "config_schema": {
+    "bandeira_kwh": {
+      "max": 5.0,
+      "min": 0.0,
+      "rotulo": "Adicional bandeira (R$/kWh)"
+    },
+    "cpu_max_w": {
+      "max": 500.0,
+      "min": 0.0,
+      "rotulo": "CPU em carga total (W)"
+    },
+    "cpu_ocioso_w": {
+      "max": 500.0,
+      "min": 0.0,
+      "rotulo": "CPU ociosa (W)"
+    },
+    "dia_leitura": {
+      "max": 28.0,
+      "min": 1.0,
+      "rotulo": "Dia de início do ciclo da conta"
+    },
+    "eficiencia_fonte": {
+      "max": 1.0,
+      "min": 0.5,
+      "rotulo": "Eficiência da fonte (0–1)"
+    },
+    "fans_usb_w": {
+      "max": 200.0,
+      "min": 0.0,
+      "rotulo": "Fans, bomba, USB, LEDs (W)"
+    },
+    "hdd_ativo_w": {
+      "max": 30.0,
+      "min": 0.0,
+      "rotulo": "HDD ativo (W)"
+    },
+    "hdd_ocioso_w": {
+      "max": 30.0,
+      "min": 0.0,
+      "rotulo": "HDD ocioso (W)"
+    },
+    "hdd_standby_w": {
+      "max": 30.0,
+      "min": 0.0,
+      "rotulo": "HDD em standby (W)"
+    },
+    "placa_mae_w": {
+      "max": 200.0,
+      "min": 0.0,
+      "rotulo": "Placa-mãe/chipset (W)"
+    },
+    "preco_kwh": {
+      "max": 20.0,
+      "min": 0.0,
+      "rotulo": "Tarifa (R$/kWh, com impostos)"
+    },
+    "ram_w": {
+      "max": 100.0,
+      "min": 0.0,
+      "rotulo": "RAM (W)"
+    },
+    "ssd_ativo_w": {
+      "max": 30.0,
+      "min": 0.0,
+      "rotulo": "SSD ativo (W)"
+    },
+    "ssd_ocioso_w": {
+      "max": 30.0,
+      "min": 0.0,
+      "rotulo": "SSD ocioso (W)"
+    }
+  },
+  "cpu_estimada": true,
+  "estimativa_24x7": {
+    "custo": 66.76,
+    "kwh": 78.545
+  },
+  "hoje": {
+    "componentes": [
+      {
+        "custo": 0.15,
+        "id": "gpu:GPU-1",
+        "kwh": 0.176,
+        "origem": "NVML (driver NVIDIA)",
+        "pct": 80.7,
+        "rotulo": "NVIDIA GeForce RTX 4060",
+        "tipo": "medido"
+      },
+      {
+        "custo": 0.02,
+        "id": "fonte_perda",
+        "kwh": 0.026,
+        "origem": "eficiência da fonte",
+        "pct": 12.0,
+        "rotulo": "Perda na fonte",
+        "tipo": "calculado"
+      },
+      {
+        "custo": 0.01,
+        "id": "ram",
+        "kwh": 0.016,
+        "origem": "valor fixo",
+        "pct": 7.3,
+        "rotulo": "RAM",
+        "tipo": "estimado"
+      }
+    ],
+    "custo": 0.19,
+    "kwh": 0.218
+  },
+  "media": {
+    "custo_dia": 2.22,
+    "horas_ligado_dia": 23.9,
+    "janela_dias": 0.08,
+    "kwh_dia": 2.607
+  },
+  "tarifa_efetiva": 0.85,
+  "tem_hdd": false,
+  "versao_api": 1
+}

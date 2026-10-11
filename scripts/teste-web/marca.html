@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Kwanto</title>
+<link href="/static/tema.css" rel="stylesheet">
+<style>
+/* Banner do README: a prancha escura do app, com o quadriculado de desenho técnico. */
+html, body { margin: 0; background: transparent; }
+.banner { width: 1280px; height: 360px; position: relative; overflow: hidden; border-radius: 18px;
+  background-color: var(--papel);
+  background-image: linear-gradient(var(--grade) 1px, transparent 1px), linear-gradient(90deg, var(--grade) 1px, transparent 1px);
+  background-size: 32px 32px; border: 1px solid var(--grade-2);
+  display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 56px; padding: 0 96px; }
+.selo { width: 168px; height: 168px; border-radius: 34px; background: var(--sup); border: 1px solid var(--grade-2);
+  display: grid; place-items: center; }
+.selo svg { width: 120px; height: 120px; color: var(--fio); }
+h1 { margin: 0; font: 600 128px/0.9 var(--f-tit); font-stretch: 118%; letter-spacing: -.035em; color: var(--tinta); }
+h1 .kw { color: var(--fio); }
+p { margin: 22px 0 0; font: 400 27px/1.35 var(--f-tit); color: var(--apagado); max-width: 760px; }
+p b { color: var(--tinta); font-weight: 500; }
+</style>
+</head>
+<body>
+<div class="banner">
+  <div class="selo"><svg viewBox="0 0 22 22" aria-hidden="true"><path d="M1 11h5l2.5-7 5 14L16 11h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></div>
+  <div>
+    <h1><span class="kw">Kw</span>anto</h1>
+    <p>Quanto o seu PC gasta de energia, <b>por componente</b>, e quanto isso pesa na <b>conta de luz</b>.</p>
+  </div>
+</div>
+</body>
+</html>

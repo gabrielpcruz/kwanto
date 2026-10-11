@@ -1,0 +1,25 @@
+# O usuário kwanto precisa existir antes de a regra udev rodar e de o serviço subir; os hooks do
+# pacman que fariam isso só rodam depois deste script.
+preparar() {
+  systemd-sysusers kwanto.conf
+  udevadm control --reload
+  udevadm trigger --subsystem-match=powercap --action=add
+  systemctl daemon-reload
+}
+
+post_install() {
+  preparar
+  systemctl enable --now kwanto-standby.service kwantod.service
+}
+
+post_upgrade() {
+  preparar
+  if systemctl is-enabled --quiet kwantod.service; then
+    systemctl enable --now kwanto-standby.service
+  fi
+  systemctl try-restart kwanto-standby.service kwantod.service
+}
+
+pre_remove() {
+  systemctl disable --now kwantod.service kwanto-standby.service
+}

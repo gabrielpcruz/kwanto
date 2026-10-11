@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Kwanto
+Comment=Consumo de energia do PC e custo na conta de luz
+Exec=/usr/bin/kwanto
+Icon=kwanto
+Categories=System;Monitor;
+Keywords=energia;consumo;watts;conta de luz;
+StartupNotify=false
+X-GNOME-Autostart-enabled=true

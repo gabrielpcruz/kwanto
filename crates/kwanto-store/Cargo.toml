@@ -1,0 +1,24 @@
+[package]
+name = "kwanto-store"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+kwanto-app = { version = "0.1.0", path = "../kwanto-app" }
+kwanto-core = { version = "0.1.0", path = "../kwanto-core" }
+r2d2 = "0.8.10"
+r2d2_sqlite = "0.35.0"
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+jiff = "0.2.38"
+kwanto-app = { path = "../kwanto-app", features = ["testes"] }
+rusqlite = "0.40.2"
+tempfile = "3.27.0"
+tokio = { version = "1.53.2", features = ["sync"] }

@@ -1,0 +1,22 @@
+/target
+*.db
+*.db-wal
+*.db-shm
+/dist
+# Rascunhos locais e nada que possa ser segredo.
+/.superpowers
+*.key
+*.minisig
+.env
+.env.*
+# Material interno de trabalho (fica só na máquina do mantenedor).
+/docs/superpowers
+# Artefatos e arquivos que podem carregar dados locais.
+*.deb
+*.rpm
+*.snap.new
+*.pending-snap
+*.log
+/manifesto.json
+privados.txt
+*.key.*

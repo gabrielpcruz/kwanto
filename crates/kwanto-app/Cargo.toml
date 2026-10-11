@@ -1,0 +1,46 @@
+[package]
+name = "kwanto-app"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+jiff = "0.2.38"
+kwanto-core = { version = "0.1.0", path = "../kwanto-core" }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.152"
+thiserror = "2.0.21"
+tokio = { version = "1.53.2", features = ["macros", "rt", "sync"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+insta = { version = "1.49.0", features = ["json"] }
+jiff = { version = "0.2.38", features = ["tzdb-bundle-always"] }
+kwanto-core = { path = "../kwanto-core", features = ["testes"] }
+
+[features]
+testes = ["kwanto-core/testes"]
+
+[[test]]
+name = "contrato_memoria"
+required-features = ["testes"]
+
+[[test]]
+name = "coleta"
+required-features = ["testes"]
+
+[[test]]
+name = "registrar_config"
+required-features = ["testes"]
+
+[[test]]
+name = "consultas"
+required-features = ["testes"]
+
+[[test]]
+name = "horario_verao"
+required-features = ["testes"]

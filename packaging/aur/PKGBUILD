@@ -1,0 +1,46 @@
+# Mantenedor: Gabriel Cruz <gabrielpcruz@users.noreply.github.com>
+# Compila do código-fonte da tag. No Arch o atualizador embutido só avisa que há versão nova;
+# a atualização vem pelo AUR, por isso o ajudante root e a política do polkit não são instalados.
+pkgname=kwanto
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Quanto o seu PC gasta de energia, por componente, e quanto isso pesa na conta de luz"
+arch=('x86_64')
+url="https://github.com/gabrielpcruz/kwanto"
+license=('Apache-2.0')
+depends=('webkit2gtk-4.1' 'gtk3' 'systemd')
+optdepends=('hdparm: detecta HDD em standby')
+makedepends=('cargo')
+options=('!lto')
+install=kwanto.install
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+# Preenchido com updpkgsums ao publicar no AUR.
+sha256sums=('SKIP')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/host: //p')"
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  export RUSTUP_TOOLCHAIN=stable CARGO_TARGET_DIR=target
+  cargo build --frozen --release -p kwantod -p kwanto -p kwanto-standby
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  install -Dm755 target/release/kwantod "$pkgdir/usr/bin/kwantod"
+  install -Dm755 target/release/kwanto "$pkgdir/usr/bin/kwanto"
+  install -Dm755 target/release/kwanto-standby "$pkgdir/usr/libexec/kwanto/kwanto-standby"
+  install -Dm644 packaging/kwantod.service "$pkgdir/usr/lib/systemd/system/kwantod.service"
+  install -Dm644 packaging/kwanto-standby.service "$pkgdir/usr/lib/systemd/system/kwanto-standby.service"
+  install -Dm644 packaging/kwanto.sysusers "$pkgdir/usr/lib/sysusers.d/kwanto.conf"
+  install -Dm644 packaging/60-kwanto.rules "$pkgdir/usr/lib/udev/rules.d/60-kwanto.rules"
+  install -Dm644 packaging/kwanto.desktop "$pkgdir/usr/share/applications/kwanto.desktop"
+  install -Dm644 packaging/kwanto.desktop "$pkgdir/etc/xdg/autostart/kwanto.desktop"
+  install -Dm644 packaging/kwanto.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/kwanto.svg"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

@@ -1,0 +1,31 @@
+[package]
+name = "kwanto-api"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+async-trait = "0.1.92"
+axum = "0.8.9"
+kwanto-app = { version = "0.1.0", path = "../kwanto-app" }
+kwanto-core = { version = "0.1.0", path = "../kwanto-core" }
+mime_guess = "2.0.5"
+rust-embed = "8.13.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.152"
+tokio = { version = "1.53.2", features = ["rt", "sync"] }
+tower-http = { version = "0.7.1", features = ["set-header"] }
+tracing = "0.1.44"
+
+[dev-dependencies]
+async-trait = "0.1.92"
+http-body-util = "0.1.5"
+jiff = "0.2.38"
+kwanto-app = { path = "../kwanto-app", features = ["testes"] }
+kwanto-core = { path = "../kwanto-core", features = ["testes"] }
+tokio = { version = "1.53.2", features = ["macros", "rt-multi-thread"] }
+tower = { version = "0.5.3", features = ["util"] }
